@@ -67,10 +67,11 @@ void MorletWaveletTransform::init(size_t width, double low_freq, double high_fre
    result_buf = (fftw_complex*)fftw_malloc(fft_len*sizeof(fftw_complex));
    signal_buf = (double*)fftw_malloc(fft_len*sizeof(double));
    fft_buf = (fftw_complex*)fftw_malloc((fft_len/2+1)*sizeof(fftw_complex));
-   memset(signal_buf, 0, fft_len*sizeof(double));
 
    plan_for_signal = fftw_plan_dft_r2c_1d(fft_len, signal_buf, fft_buf, FFTW_PATIENT);
    plan_for_inverse_transform = fftw_plan_dft_1d(fft_len, prod_buf, result_buf, FFTW_BACKWARD, FFTW_PATIENT);
+
+   memset(signal_buf, 0, fft_len*sizeof(double));
 }
 
 void product_with_herm_fft(size_t len, fftw_complex* fft1, fftw_complex* fft_herm, fftw_complex* result) {
@@ -104,5 +105,12 @@ void MorletWaveletTransform::multiphasevec_powers(double* signal, double* powers
 
       // inverse fft
       fftw_execute(plan_for_inverse_transform);
+
+      // retrieve powers
+      size_t first_idx = (wavelet->nt-1) / 2;
+      for(size_t i=first_idx; i<first_idx+signal_len_; ++i) {
+         result_buf[i][0] /= fft_len; result_buf[i][1] /= fft_len;
+         *(powers++) = result_buf[i][0] * result_buf[i][0] + result_buf[i][1] * result_buf[i][1];
+      }
    }
 }
