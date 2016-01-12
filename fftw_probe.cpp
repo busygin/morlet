@@ -29,9 +29,9 @@ int main() {
    fputc('\n', stdout);
 
    fftw_execute(p);
-   for(i=0; i<10; ++i)
+   /*for(i=0; i<10; ++i)
       printf("%g+i%g ", creal(out[i]), cimag(out[i]));
-   fputc('\n', stdout);
+   fputc('\n', stdout);*/
 
    fftw_execute(p_inv);
    fftw_execute(p);
