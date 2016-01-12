@@ -8,15 +8,30 @@
 #include "morlet.h"
 
 
-void MorletWave::init(double width, double freq) {
+size_t nextpow2(size_t v) {
+   --v;
+   v |= v >> 1;
+   v |= v >> 2;
+   v |= v >> 4;
+   v |= v >> 8;
+   v |= v >> 16;
+   return ++v;
+}
+
+
+void MorletWaveFFT::init(size_t width, double freq, size_t win_size) {
    double st = 1.0/(2.0*M_PI*(freq/width));
 
    t=-3.5*st:dt:3.5*st;
-   curWave=morlet(this.freqs(i),t,5);
+   cur_wave=morlet(freq,t,width);
 
-   this.Lys(i)=this.total_winsize+length(curWave)-1;
-   this.Ly2s(i)=pow2(nextpow2(this.Lys(i)));
+   len0 = win_size + length(curWave) - 1;
+   len = nextpow2(len0);
+   fft = (fftw_complex*) fftw_malloc(len*sizeof(fftw_complex));
 
-   curWaveFFT=fft(curWave,this.Ly2s(i));
+   fftw_plan plan = fftw_plan_dft_1d(len, cur_wave, fft, FFTW_FORWARD, FFTW_ESTIMATE);
+   fftw_execute(plan);
 
+   fftw_destroy_plan(plan);
+   fftw_free(fft);
 }
