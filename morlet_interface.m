@@ -20,7 +20,7 @@ classdef morlet_interface < handle
         end
 
         %% multiphasevec
-        function varargout = test(this, varargin)
+        function varargout = multiphasevec(this, varargin)
             [varargout{1:nargout}] = morlet_interface_mex('multiphasevec', this.objectHandle, varargin{:});
         end
     end
