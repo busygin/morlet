@@ -1,4 +1,5 @@
 #include "mex.h"
+#include "matrix.h"
 #include "class_handle.hpp"
 #include "morlet.h"
 
@@ -54,17 +55,19 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     // multiphasevec
     if (!strcmp("multiphasevec", cmd)) {
         // Check parameters
-        if (nlhs < 0 || nrhs < 2)
+        if (nlhs < 0 || nrhs < 4)
             mexErrMsgTxt("multiphasevec: Unexpected arguments.");
         // Call the method
         // puts("Calling multiphasevec_powers");
-        double *signal = new double[4096];
-        double *powers = new double[8*4096];
-        for (size_t i=0; i<4096; ++i)
-            signal[i] = rand() / RAND_MAX;
+        // double *signal = new double[4096];
+        // double *powers = new double[8*4096];
+        double* signal = mxGetPr(prhs[2]);
+        double* powers = mxGetPr(prhs[3]);
+        /*for (size_t i=0; i<4096; ++i)
+            signal[i] = rand() / RAND_MAX;*/
         wavelet_transformer->multiphasevec_powers(signal, powers);
-        delete[] powers;
-        delete[] signal;
+        // delete[] powers;
+        // delete[] signal;
         return;
     }
     
