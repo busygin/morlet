@@ -1,24 +1,20 @@
-//
-// Created by busygin on 1/11/16.
-//
+%module morlet
+%{
+#define SWIG_FILE_WITH_INIT
+#include "morlet.h"
+%}
 
-#ifndef MORLET_MORLET_H
-#define MORLET_MORLET_H
+%include "numpy.i"
 
-#include <fftw3.h>
+%init %{
+import_array();
+%}
 
-class MorletWaveFFT {
-public:
-   size_t len0;
-   size_t len;
-   fftw_complex* fft;
-   size_t nt;
+%numpy_typemaps(double, NPY_DOUBLE, size_t)
 
-   MorletWaveFFT(): len0(0), len(0), fft(NULL) {}
-   ~MorletWaveFFT() { if(fft) fftw_free(fft); }
+%apply (double* IN_ARRAY1, size_t DIM1) {(double *signal, size_t signal_len)};
+%apply (double* INPLACE_ARRAY1, size_t DIM1) {(double *powers, size_t power_len)};
 
-   size_t init(size_t width, double freq, size_t win_size, double sample_freq);
-};
 
 class MorletWaveletTransform {
 public:
@@ -61,5 +57,3 @@ public:
    // this is to make numpy interface possible
    void multiphasevec(double* signal, size_t signal_len, double* powers, size_t power_len);
 };
-
-#endif //MORLET_MORLET_H

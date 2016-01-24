@@ -19,4 +19,4 @@ for i=1:8
     end
 end
 
-disp(powers-powers2);
+disp(norm(powers-powers2)/norm(powers2));
