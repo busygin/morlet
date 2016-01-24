@@ -46,10 +46,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     // init
     if (!strcmp("init", cmd)) {
         // Check parameters
-        if (nlhs < 0 || nrhs < 2)
+        if (nlhs < 0 || nrhs < 8)
             mexErrMsgTxt("init: Unexpected arguments.");
         // Call the method
-        wavelet_transformer->init(5, 3.0, 180.0, 8, 1000.0, 4096);
+        size_t width = size_t(mxGetScalar(prhs[2]));
+        double min_freq = mxGetScalar(prhs[3]);
+        double max_freq = mxGetScalar(prhs[4]);
+        size_t n_freqs = size_t(mxGetScalar(prhs[5]));
+        double samplerate = mxGetScalar(prhs[6]);
+        size_t winsize = size_t(mxGetScalar(prhs[7]));
+        //printf("width=%ld, min_freq=%lg, max_freq=%lg, n_freqs=%ld, samplerate=%lg, winsize=%ld\n", width, min_freq, max_freq, n_freqs, samplerate, winsize);
+        wavelet_transformer->init(width, min_freq, max_freq, n_freqs, samplerate, winsize);
         return;
     }
     // multiphasevec
@@ -57,17 +64,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         // Check parameters
         if (nlhs < 0 || nrhs < 4)
             mexErrMsgTxt("multiphasevec: Unexpected arguments.");
+
         // Call the method
-        // puts("Calling multiphasevec_powers");
-        // double *signal = new double[4096];
-        // double *powers = new double[8*4096];
         double* signal = mxGetPr(prhs[2]);
         double* powers = mxGetPr(prhs[3]);
-        /*for (size_t i=0; i<4096; ++i)
-            signal[i] = rand() / RAND_MAX;*/
         wavelet_transformer->multiphasevec_powers(signal, powers);
-        // delete[] powers;
-        // delete[] signal;
         return;
     }
     

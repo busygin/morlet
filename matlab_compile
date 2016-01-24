@@ -1,0 +1,1 @@
+mex morlet_interface_mex.cpp morlet.cpp -I/home1/busygin/cpp/fftw-3.3.4/api -lfftw3
