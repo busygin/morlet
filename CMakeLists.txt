@@ -1,6 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(MorletPython)
 
+add_definitions(-std=c++11)
 
 
 # SET(FFTW_LIB_DIR  "/Users/m/src-install/fftw-3.3.4/lib" CACHE PATH "path to directory with libfft library")
@@ -76,5 +77,10 @@ INSTALL(FILES
 	DESTINATION ${CMAKE_INSTALL_PREFIX}
 	)
 
+
+add_custom_target(install_${PROJECT_NAME}
+        make install
+        DEPENDS _morlet
+        COMMENT "Installing ${PROJECT_NAME}")
 
 
