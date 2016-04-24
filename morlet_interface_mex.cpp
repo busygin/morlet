@@ -60,7 +60,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         return;
     }
     // multiphasevec
-    if (!strcmp("multiphasevec", cmd)) {
+    else if (!strcmp("multiphasevec", cmd)) {
         // Check parameters
         if (nlhs < 0 || nrhs < 4)
             mexErrMsgTxt("multiphasevec: Unexpected arguments.");
@@ -68,7 +68,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         // Call the method
         double* signal = mxGetPr(prhs[2]);
         double* powers = mxGetPr(prhs[3]);
-        wavelet_transformer->multiphasevec_powers(signal, powers);
+        if (nrhs == 4)
+            wavelet_transformer->multiphasevec_powers(signal, powers);
+        else {
+            double* phases = mxGetPr(prhs[4]);
+            wavelet_transformer->multiphasevec_powers_and_phases(signal, powers, phases);
+        }
         return;
     }
     

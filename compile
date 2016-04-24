@@ -1,3 +1,3 @@
 export SWIG_LIB=/home1/busygin/swig-3.0.7/Lib; ~/swig-3.0.7/swig -c++ -python morlet.i
-g++ -fpic -O3 -c -Wall -I/usr/global/anaconda/include/python2.7 -I/usr/global/anaconda/lib/python2.7/site-packages/numpy/core/include -I/home1/busygin/cpp/fftw-3.3.4/api morlet.cpp morlet_wrap.cxx
+g++ -fpic -std=c++11 -O3 -c -Wall -I/usr/global/anaconda/include/python2.7 -I/usr/global/anaconda/lib/python2.7/site-packages/numpy/core/include -I/home1/busygin/cpp/fftw-3.3.4/api morlet.cpp morlet_wrap.cxx
 g++ -shared *.o -lfftw3 -o _morlet.so
