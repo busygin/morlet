@@ -280,6 +280,9 @@ void MorletWaveletTransform::multiphasevec_powers_and_phases(double *signal, dou
     }
 }
 
-void MorletWaveletTransform::multiphasevec(double *signal, size_t signal_len, double *powers, size_t power_len) {
-    multiphasevec_powers(signal, powers);
+void MorletWaveletTransform::multiphasevec(double *signal, size_t signal_len, double *powers, size_t power_len, double* phases, size_t phase_len) {
+    if (phases==NULL)
+        multiphasevec_powers(signal, powers);
+    else
+        multiphasevec_powers_and_phases(signal, powers, phases);
 }
