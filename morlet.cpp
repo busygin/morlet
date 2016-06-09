@@ -268,7 +268,7 @@ void MorletWaveletTransform::multiphasevec_powers_and_phases(double *signal, dou
         // inverse fft
         fftw_execute(plan_for_inverse_transform[plan - 1]);
 
-        // retrieve powers
+        // retrieve powers and phases
         size_t first_idx = (wavelet->nt - 1) / 2;
         for (size_t i = first_idx; i < first_idx + signal_len_; ++i) {
             result_buf[i][0] /= len;
@@ -279,7 +279,7 @@ void MorletWaveletTransform::multiphasevec_powers_and_phases(double *signal, dou
     }
 }
 
-void MorletWaveletTransform::multiphasevec_c(double *signal, fftw_complex *wavelets) {
+void MorletWaveletTransform::multiphasevec_c(double *signal, std::complex<double> *wavelets) {
     memcpy(signal_buf, signal, signal_len_ * sizeof(double));
 
     size_t last_len = 0;
@@ -298,12 +298,10 @@ void MorletWaveletTransform::multiphasevec_c(double *signal, fftw_complex *wavel
         // inverse fft
         fftw_execute(plan_for_inverse_transform[plan - 1]);
 
-        // retrieve powers
+        // retrieve wavelets
         size_t first_idx = (wavelet->nt - 1) / 2;
         for (size_t i = first_idx; i < first_idx + signal_len_; ++i) {
-            (*wavelets)[0] = result_buf[i][0] / len;
-            (*wavelets)[1] = result_buf[i][1] / len;
-            ++wavelets;
+            *(wavelets++) = std::complex<double>(result_buf[i][0]/len, result_buf[i][1]/len);
         }
     }
 }
@@ -315,6 +313,6 @@ void MorletWaveletTransform::multiphasevec(double *signal, size_t signal_len, do
         multiphasevec_powers_and_phases(signal, powers, phases);
 }
 
-void MorletWaveletTransform::multiphasevec_complex(double *signal, size_t signal_len, fftw_complex *wavelets, size_t wavelet_len) {
+void MorletWaveletTransform::multiphasevec_complex(double *signal, size_t signal_len, std::complex<double> *wavelets, size_t wavelet_len) {
     multiphasevec_c(signal, wavelets);
 }
