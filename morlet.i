@@ -2,6 +2,7 @@
 %{
 #define SWIG_FILE_WITH_INIT
 #include "morlet.h"
+#include <complex>
 %}
 
 %include "numpy.i"
@@ -11,10 +12,12 @@ import_array();
 %}
 
 %numpy_typemaps(double, NPY_DOUBLE, size_t)
+%numpy_typemaps(std::complex<double>, NPY_CDOUBLE, size_t)
 
 %apply (double* IN_ARRAY1, size_t DIM1) {(double *signal, size_t signal_len)};
 %apply (double* INPLACE_ARRAY1, size_t DIM1) {(double *powers, size_t power_len)};
 %apply (double* INPLACE_ARRAY1, size_t DIM1) {(double *phases, size_t phase_len)};
-%apply (double* IN_ARRAY1, size_t DIM1) {(double *freqs, size_t nf )};
+%apply (std::complex<double>* INPLACE_ARRAY1, size_t DIM1) {(std::complex<double> *wavelets, size_t wavelet_len)};
+%apply (double* IN_ARRAY1, size_t DIM1) {(double *freqs, size_t nf)};
 
 %include "morlet.h"
