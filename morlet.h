@@ -7,6 +7,7 @@
 
 #include <fftw3.h>
 
+
 class MorletWaveFFT {
 public:
     size_t len0;
@@ -71,8 +72,11 @@ public:
 
     void multiphasevec_powers_and_phases(double *signal, double *powers, double *phases);
 
+    void multiphasevec_c(double *signal, fftw_complex *wavelets);
+
     // this is to make numpy interface possible
     void multiphasevec(double *signal, size_t signal_len, double *powers, size_t power_len, double* phases=NULL, size_t phase_len=0);
+    void multiphasevec_complex(double *signal, size_t signal_len, fftw_complex *wavelets, size_t wavelet_len);
 };
 
 #endif //MORLET_MORLET_H
