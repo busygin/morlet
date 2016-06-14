@@ -89,6 +89,7 @@ MorletWaveletTransform::~MorletWaveletTransform() {
         delete[] plan_for_signal;
         delete[] plan_for_inverse_transform;
     }
+
 }
 
 
@@ -251,6 +252,8 @@ void MorletWaveletTransform::multiphasevec_powers(double *signal, double *powers
 
 void MorletWaveletTransform::multiphasevec_powers_and_phases(double *signal, double *powers, double *phases) {
     memcpy(signal_buf, signal, signal_len_ * sizeof(double));
+
+//    cerr<<"THIS IS multiphasevec_powers_and_phases"<<endl;
 
     size_t last_len = 0;
     size_t plan = 0;

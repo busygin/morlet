@@ -7,8 +7,24 @@
 #include <ctime>
 #include "morlet.h"
 
+#include "MorletWaveletTransformMP.h"
+
 
 int main() {
+
+   unsigned int cpus = 2;
+   MorletWaveletTransformMP m(cpus=cpus);
+   m.compute();
+
+   for (int i = 0  ; i < cpus ; ++i){
+      m.computeMP(i);
+
+
+   }
+
+    m.threads();
+
+
 //   MorletWaveletTransform morlet;
 //   morlet.init(5, 3.0, 180.0, 8, 1000, 4096);
 //

@@ -1,7 +1,9 @@
-%module morlet
+
+%module ("threads"=1) morlet
 %{
 #define SWIG_FILE_WITH_INIT
 #include "morlet.h"
+#include "MorletWaveletTransformMP.h"
 #include <complex>
 %}
 
@@ -20,4 +22,19 @@ import_array();
 %apply (std::complex<double>* INPLACE_ARRAY1, size_t DIM1) {(std::complex<double> *wavelets, size_t wavelet_len)};
 %apply (double* IN_ARRAY1, size_t DIM1) {(double *freqs, size_t nf)};
 
+%apply (double* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(double *signal_array, size_t num_signals, size_t signal_len)};
+%apply (double* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(double *wavelet_pow_array, size_t num_wavelets, size_t signal_len)};
+// %apply (double* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(double *wavelet_pow_array, size_t num_wavelets, size_t signal_len_pow)};
+%apply (double* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(double *wavelet_phase_array, size_t num_wavelets, size_t signal_len)};
+
+
+// %apply (double* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(double *wavelet_array, size_t num_wavelets, size_t signal_len)};
+// %apply (double* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(double *wavelet_array, size_t num_wavelets, size_t signal_len_1)};
+
+
+
+
 %include "morlet.h"
+%include "MorletWaveletTransformMP.h"
+
+// %clear(double *signal_array, size_t num_signals, size_t signal_len);

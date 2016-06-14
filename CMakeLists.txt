@@ -4,6 +4,8 @@ PROJECT(MorletPython)
 add_definitions(-std=c++11)
 
 
+
+
 # SET(FFTW_LIB_DIR  "/Users/m/src-install/fftw-3.3.4/lib" CACHE PATH "path to directory with libfft library")
 # SET(FFTW_INCLUDE_DIR "/Users/m/src-install/fftw-3.3.4/include" CACHE PATH "path to directory with libfft headers")
 
@@ -26,11 +28,13 @@ SET(FFTW_LIB "fftw3" CACHE STRING "name of the fftw library")
 SET(FFTW_INCLUDE_DIR "/Users/m/src-install/fftw-3.3.4/include" CACHE PATH "path to directory with libfft headers")
 
 
+
+
 link_directories(${FFTW_LIB_DIR})
 include_directories(${FFTW_INCLUDE_DIR})
 
 # --------- morlet library
-SET(SRCS morlet.cpp resample.cpp)
+SET(SRCS morlet.cpp resample.cpp MorletWaveletTransformMP.cpp MorletWaveletTransformMP.h)
 ADD_LIBRARY(morlet STATIC ${SRCS})
 TARGET_LINK_LIBRARIES(morlet ${FFTW_LIB})
 
@@ -78,9 +82,10 @@ INSTALL(FILES
 	)
 
 
+
+#custom install command to create new target in clion. Clion does not provide INSTALL target by default
 add_custom_target(install_${PROJECT_NAME}
         make install
         DEPENDS _morlet
         COMMENT "Installing ${PROJECT_NAME}")
-
 
