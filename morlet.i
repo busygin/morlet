@@ -4,7 +4,9 @@
 #define SWIG_FILE_WITH_INIT
 #include "morlet.h"
 #include "MorletWaveletTransformMP.h"
+#include "enums.h"
 #include <complex>
+
 %}
 
 %include "numpy.i"
@@ -26,14 +28,15 @@ import_array();
 %apply (double* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(double *wavelet_pow_array, size_t num_wavelets, size_t signal_len)};
 // %apply (double* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(double *wavelet_pow_array, size_t num_wavelets, size_t signal_len_pow)};
 %apply (double* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(double *wavelet_phase_array, size_t num_wavelets, size_t signal_len)};
-
+%apply (std::complex<double>* INPLACE_ARRAY1, size_t DIM1) {(std::complex<double> *wavelets_complex_array, size_t wavelet_len)};
+%apply (std::complex<double>* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(std::complex<double> *wavelet_complex_array, size_t num_wavelets, size_t signal_len)};
 
 // %apply (double* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(double *wavelet_array, size_t num_wavelets, size_t signal_len)};
 // %apply (double* INPLACE_ARRAY2, size_t DIM1, size_t DIM2) {(double *wavelet_array, size_t num_wavelets, size_t signal_len_1)};
 
 
 
-
+%include "enums.h"
 %include "morlet.h"
 %include "MorletWaveletTransformMP.h"
 

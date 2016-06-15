@@ -34,7 +34,7 @@ link_directories(${FFTW_LIB_DIR})
 include_directories(${FFTW_INCLUDE_DIR})
 
 # --------- morlet library
-SET(SRCS morlet.cpp resample.cpp MorletWaveletTransformMP.cpp MorletWaveletTransformMP.h)
+SET(SRCS morlet.cpp resample.cpp MorletWaveletTransformMP.cpp MorletWaveletTransformMP.h enums.h)
 ADD_LIBRARY(morlet STATIC ${SRCS})
 TARGET_LINK_LIBRARIES(morlet ${FFTW_LIB})
 

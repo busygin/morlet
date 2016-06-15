@@ -8,17 +8,25 @@
 #include <vector>
 #include <memory>
 #include <mutex>
-
+#include "enums.h"
+#include <complex>
 
 class MorletWaveletTransform;
+
+
 
 class MorletWaveletTransformMP {
 
     std::mutex mut;
 
 public:
+
+
+
     unsigned int cpus = 1;
     unsigned int num_freq = -1;
+
+
 
     std::vector<std::shared_ptr<MorletWaveletTransform>> mwt_vec;
 
@@ -28,10 +36,14 @@ public:
     double *signal_array=nullptr;
     double *wavelet_pow_array=nullptr;
     double *wavelet_phase_array=nullptr;
+
+    std::complex<double> *wavelet_complex_array=nullptr;
+
     double *freqs=nullptr;
     double sample_freq = -1.0;
     size_t  width = -1;
 
+    OutputType output_type = OutputType::POWER;
 
 
     MorletWaveletTransformMP(unsigned int cpus = 1);
@@ -52,7 +64,17 @@ public:
         this->wavelet_phase_array = wavelet_phase_array;
     }
 
+    void set_wavelet_complex_array(std::complex<double> *wavelet_complex_array, size_t num_wavelets, size_t signal_len){
+        this->wavelet_complex_array = wavelet_complex_array;
+    }
 
+
+    void set_output_type(OutputType output_type){
+//        std::cerr<<"MorletWaveletTransformMP outputType="<<output_type<<std::endl;
+        this->output_type = output_type;
+
+//        std::cerr<<"AFTER SETTING MorletWaveletTransformMP outputType="<<this->output_type<<std::endl;
+    }
 
 //    void initialize_arrays(double *signal_array, size_t num_signals, size_t signal_len,
 //                           double *wavelet_pow_array, size_t num_wavelets, size_t signal_len_pow
@@ -77,6 +99,7 @@ public:
         this->num_freq = nf;
         this->width = width;
     }
+
 
 
     void prepare_run();

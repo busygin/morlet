@@ -9,6 +9,8 @@
 #include "morlet.h"
 #include "log_space.h"
 #include <iostream>
+#include <functional>
+
 
 using namespace std;
 
@@ -249,6 +251,56 @@ void MorletWaveletTransform::multiphasevec_powers(double *signal, double *powers
         }
     }
 }
+
+void MorletWaveletTransform::wavelet_pow_phase_py(double *signal, size_t signal_len,
+                          double *powers, size_t power_len,
+                          double *phases , size_t phase_len,
+                          std::complex<double> * wavelets, size_t wavelet_len
+){
+
+    this->wavelet_pow_phase(signal,powers,phases,wavelets);
+}
+
+
+void MorletWaveletTransform::wavelet_pow_phase(double *signal, double *powers, double *phases,std::complex<double> * wavelets){
+
+    memcpy(signal_buf, signal, signal_len_ * sizeof(double));
+
+    size_t last_len = 0;
+    size_t plan = 0;
+    for (MorletWaveFFT *wavelet = morlet_wave_ffts; wavelet < morlet_wave_ffts + n_freqs; ++wavelet) {
+        size_t len = wavelet->len;
+        if (len != last_len) {
+            last_len = len;
+            fftw_execute(plan_for_signal[plan]);
+            ++plan;
+        }
+
+        // construct product
+        product_with_herm_fft(len, wavelet->fft, fft_buf, prod_buf);
+
+        // inverse fft
+        fftw_execute(plan_for_inverse_transform[plan - 1]);
+
+        // retrieve powers
+        size_t first_idx = (wavelet->nt - 1) / 2;
+        for (size_t i = first_idx; i < first_idx + signal_len_; ++i) {
+            result_buf[i][0] /= len;
+            result_buf[i][1] /= len;
+
+            phase_and_pow_fcn(this, result_buf[i][0],result_buf[i][1],powers,phases,wavelets);
+//            double tmp = result_buf[i][0] * result_buf[i][0] + result_buf[i][1] * result_buf[i][1];
+
+//            if (*(powers-1)!=tmp){
+//                cerr<<"GOT DIFFRENT VALUES="<<tmp<<" vs "<<*(powers-1)<<endl;
+//                exit(0);
+//            }
+
+//            *(powers++) = result_buf[i][0] * result_buf[i][0] + result_buf[i][1] * result_buf[i][1];
+        }
+    }
+}
+
 
 void MorletWaveletTransform::multiphasevec_powers_and_phases(double *signal, double *powers, double *phases) {
     memcpy(signal_buf, signal, signal_len_ * sizeof(double));
