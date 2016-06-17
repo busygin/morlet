@@ -2,8 +2,7 @@
 // Created by busygin on 1/11/16.
 //
 
-#ifndef MORLET_MORLET_H
-#define MORLET_MORLET_H
+#pragma once
 
 #include <fftw3.h>
 #include <cmath>
@@ -30,7 +29,8 @@ public:
 
 class MorletWaveletTransform {
 public:
-    typedef std::function<void(MorletWaveletTransform*, double, double, double *&, double *&, std::complex<double> *&)> Fcn_t;
+    typedef std::function<void(MorletWaveletTransform *, double, double, double *&, double *&,
+                               std::complex<double> *&)> Fcn_t;
 
 
 public:
@@ -61,7 +61,7 @@ public:
     ~MorletWaveletTransform();
 
 
-    std::function<void(MorletWaveletTransform*, double, double, double *&, double *&, std::complex<double> *& )>
+    std::function<void(MorletWaveletTransform *, double, double, double *&, double *&, std::complex<double> *&)>
             phase_and_pow_fcn = &MorletWaveletTransform::wv_pow;
 
 
@@ -74,48 +74,37 @@ public:
 
     void multiphasevec_powers_and_phases(double *signal, double *powers, double *phases);
 
-    void wavelet_pow_phase(double *signal, double *powers, double *phases, std::complex<double> * wavelets);
+    void wavelet_pow_phase(double *signal, double *powers, double *phases, std::complex<double> *wavelets);
 
-    void wavelet_pow_phase_py(double *signal, size_t signal_len,  double *powers, size_t power_len, double *phases ,
-                              size_t phase_len, std::complex<double> * wavelets, size_t wavelet_len);
+    void wavelet_pow_phase_py(double *signal, size_t signal_len, double *powers, size_t power_len, double *phases,
+                              size_t phase_len, std::complex<double> *wavelets, size_t wavelet_len);
 
 
-    void set_output_type(OutputType output_type){
-//        std::cerr<<"Looking for output type="<<outputType<<std::endl;
-        auto mitr =  output_type_2_fcn_map.find(output_type);
-        if (mitr != output_type_2_fcn_map.end()){
+    void set_output_type(OutputType output_type) {
+        auto mitr = output_type_2_fcn_map.find(output_type);
+        if (mitr != output_type_2_fcn_map.end()) {
             phase_and_pow_fcn = mitr->second;
         }
-//        std::cerr<<"mitr->first="<<mitr->first<<std::endl;
-//        exit(0);
     }
 
-
-
-    void wv_pow(double r, double i, double * &powers, double *&phase, std::complex<double> *& wavelets) {
-//        std::cerr<<"r="<<r<<" i="<<i<<std::endl;
-        *(powers++) =  r * r + i * i;
-
+    void wv_pow(double r, double i, double *&powers, double *&phase, std::complex<double> *&wavelets) {
+        *(powers++) = r * r + i * i;
     }
 
-    void wv_phase(double r, double i, double * &powers, double *&phase, std::complex<double> *& wavelets) {
+    void wv_phase(double r, double i, double *&powers, double *&phase, std::complex<double> *&wavelets) {
 
         *(phase++) = atan2(i, r);
-//        std::cerr<<"phase="<<*(phase-1)<<" "<<*phase<<std::endl;
-//        exit(0);
+
     }
 
-    void wv_both(double r, double i, double * &powers, double *&phase, std::complex<double> *& wavelets) {
-        wv_pow(r,i,powers,phase, wavelets);
-        wv_phase(r,i,powers,phase, wavelets);
-//        *(powers++) =  r * r + i * i;
-//        *(phase++) = atan2(i, r);
+    void wv_both(double r, double i, double *&powers, double *&phase, std::complex<double> *&wavelets) {
+        wv_pow(r, i, powers, phase, wavelets);
+        wv_phase(r, i, powers, phase, wavelets);
     }
 
-    void wv_complex(double r, double i, double * &powers, double *&phase, std::complex<double> *& wavelet_complex) {
+    void wv_complex(double r, double i, double *&powers, double *&phase, std::complex<double> *&wavelet_complex) {
         *(wavelet_complex++) = std::complex<double>(r, i);
     }
-
 
 
     void multiphasevec_c(double *signal, std::complex<double> *wavelets);
@@ -127,14 +116,13 @@ public:
     void multiphasevec_complex(double *signal, size_t signal_len, std::complex<double> *wavelets, size_t wavelet_len);
 
 private:
-    std::map <OutputType, Fcn_t> output_type_2_fcn_map {
-            { OutputType::POWER, &MorletWaveletTransform::wv_pow },
-            { OutputType::PHASE, &MorletWaveletTransform::wv_phase },
-            { OutputType::BOTH, &MorletWaveletTransform::wv_both },
-            { OutputType::COMPLEX, &MorletWaveletTransform::wv_complex },
+    std::map<OutputType, Fcn_t> output_type_2_fcn_map{
+            {OutputType::POWER,   &MorletWaveletTransform::wv_pow},
+            {OutputType::PHASE,   &MorletWaveletTransform::wv_phase},
+            {OutputType::BOTH,    &MorletWaveletTransform::wv_both},
+            {OutputType::COMPLEX, &MorletWaveletTransform::wv_complex},
     };
 
 
 };
 
-#endif //MORLET_MORLET_H

@@ -287,16 +287,7 @@ void MorletWaveletTransform::wavelet_pow_phase(double *signal, double *powers, d
         for (size_t i = first_idx; i < first_idx + signal_len_; ++i) {
             result_buf[i][0] /= len;
             result_buf[i][1] /= len;
-
             phase_and_pow_fcn(this, result_buf[i][0],result_buf[i][1],powers,phases,wavelets);
-//            double tmp = result_buf[i][0] * result_buf[i][0] + result_buf[i][1] * result_buf[i][1];
-
-//            if (*(powers-1)!=tmp){
-//                cerr<<"GOT DIFFRENT VALUES="<<tmp<<" vs "<<*(powers-1)<<endl;
-//                exit(0);
-//            }
-
-//            *(powers++) = result_buf[i][0] * result_buf[i][0] + result_buf[i][1] * result_buf[i][1];
         }
     }
 }

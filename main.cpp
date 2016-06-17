@@ -14,15 +14,15 @@ int main() {
 
    unsigned int cpus = 2;
    MorletWaveletTransformMP m(cpus=cpus);
-   m.compute();
-
-   for (int i = 0  ; i < cpus ; ++i){
-      m.computeMP(i);
-
-
-   }
-
-    m.threads();
+//   m.compute();
+//
+//   for (int i = 0  ; i < cpus ; ++i){
+//      m.computeMP(i);
+//
+//
+//   }
+//
+//    m.threads();
 
 
 //   MorletWaveletTransform morlet;
